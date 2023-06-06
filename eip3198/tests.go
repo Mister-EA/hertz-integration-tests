@@ -152,7 +152,7 @@ func testBaseFeeGlobalPreHertz(boundContract *bind.BoundContract) error {
 	err = boundContract.Call(nil, &[]interface{}{&result}, "basefee_global")
 	expectedErrorMsg := "invalid opcode: BASEFEE"
 	if err == nil {
-		return fmt.Errorf("Expected %s, got <nil>", expectedErrorMsg)
+		return fmt.Errorf("expected %s but got `no error` instead", expectedErrorMsg)
 	}
 	if err.Error() != expectedErrorMsg {
 		return fmt.Errorf("Expected %s, got %s", expectedErrorMsg, err.Error())
