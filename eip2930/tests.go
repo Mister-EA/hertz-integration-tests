@@ -190,7 +190,10 @@ func preHertzTests() {
 		log.Fatalf("Too late to run pre-Hertz tests since current block number %v is after Hertz hard fork block %v.\n", blockNr, config.PostHertzBlockNumber)
 	}
 	log.Printf("Waiting for block number %v to start running the test cases...\n", config.PreHertzBlockNumber)
-	runPreHertz2930Tests()
+	err = runPreHertz2930Tests()
+	if err != nil {
+		log.Fatal(err)
+	}
 	log.Println("All Pre-Hertz tests passed!")
 }
 
