@@ -22,6 +22,15 @@ The genesis config should define the block heights for `berlinBlock`, `londonBlo
     }
 ```
 
+To test EIP-2930, the following memory address and contents are set in the `alloc` section of the genesis config to simplify the test.
+```
+      "0x000000000000000000000000000000000000aaaa" : {
+        "balance": "0x0",
+        "code": "0x58585454"
+      }
+```
+This add the bytecode `PUSH`, `PUSH`,`SLOAD`,`SLOAD` at the address `0x000000000000000000000000000000000000aaaa`, which will be used for construction of accessListTx.
+
 An example genesis file with all these requirements can be found in `genesis.json`.
 
 ### Start the BSC node
