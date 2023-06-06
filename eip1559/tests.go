@@ -223,6 +223,9 @@ func testLegacyTxPreHertz() error {
 func testDefaultDynamicFeeTxPreHertz() error {
 	_, err := sendDefaultDynamicTx(false)
 	// DynamicFeeTx before Hertz should give ErrTxTypeNotSupported
+	if err == nil {
+		return fmt.Errorf("expected ErrTxTypeNotSupported but got no error instead")
+	}
 	if err != nil && err.Error() != types.ErrTxTypeNotSupported.Error() {
 		return fmt.Errorf("expected ErrTxTypeNotSupported but got '%v' instead", err)
 	}
@@ -232,6 +235,9 @@ func testDefaultDynamicFeeTxPreHertz() error {
 func testSmallGasFeeCapDynamicFeeTxPreHertz() error {
 	_, err := sendSmallGasFeeCapDynamicFeeTx()
 	// DynamicFeeTx before Hertz should give ErrTxTypeNotSupported
+	if err == nil {
+		return fmt.Errorf("expected ErrTxTypeNotSupported but got no error instead")
+	}
 	if err != nil && err.Error() != types.ErrTxTypeNotSupported.Error() {
 		return fmt.Errorf("expected ErrTxTypeNotSupported but got '%v' instead", err)
 	}
@@ -241,11 +247,11 @@ func testSmallGasFeeCapDynamicFeeTxPreHertz() error {
 func testSmallGasTipCapDynamicFeeTxPreHertz() error {
 	_, err := sendSmallGasTipCapDynamicFeeTx()
 	// DynamicFeeTx before Hertz should give ErrTxTypeNotSupported
+	if err == nil {
+		return fmt.Errorf("expected ErrTxTypeNotSupported but got no error instead")
+	}
 	if err != nil && err.Error() != types.ErrTxTypeNotSupported.Error() {
 		return fmt.Errorf("expected ErrTxTypeNotSupported but got '%v' instead", err)
-	}
-	if err == nil {
-		return errors.New("error should not be nil")
 	}
 	return nil
 
@@ -391,11 +397,11 @@ func testSmallGasTipCapDynamicFeeTxPostHertz() error {
 // Send a DynamicFeeTx with GasFeeCap < GasTipCap
 func testSmallGasFeeCapDynamicFeeTxPostHertz() error {
 	_, err := sendSmallGasFeeCapDynamicFeeTx()
+	if err == nil {
+		return fmt.Errorf("expected ErrTipAboveFeeCap but got no error instead")
+	}
 	if err != nil && err.Error() != core.ErrTipAboveFeeCap.Error() {
 		return fmt.Errorf("expected ErrTipAboveFeeCap but got '%v' instead", err)
-	}
-	if err == nil {
-		return errors.New("error should not be nil")
 	}
 	return nil
 }
