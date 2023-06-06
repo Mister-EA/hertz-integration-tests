@@ -2,10 +2,7 @@ module hertzTests
 
 go 1.19
 
-require (
-	github.com/ethereum/go-ethereum v1.11.6
-	github.com/rs/zerolog v1.29.1
-)
+require github.com/ethereum/go-ethereum v1.11.6
 
 require (
 	github.com/VictoriaMetrics/fastcache v1.6.0 // indirect
