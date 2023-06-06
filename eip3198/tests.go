@@ -151,6 +151,9 @@ func testBaseFeeGlobalPreHertz(boundContract *bind.BoundContract) error {
 	var result *big.Int
 	err = boundContract.Call(nil, &[]interface{}{&result}, "basefee_global")
 	expectedErrorMsg := "invalid opcode: BASEFEE"
+	if err == nil {
+		return fmt.Errorf("Expected %s, got <nil>", expectedErrorMsg)
+	}
 	if err.Error() != expectedErrorMsg {
 		return fmt.Errorf("Expected %s, got %s", expectedErrorMsg, err.Error())
 	}
@@ -161,6 +164,9 @@ func testBaseFeeAssemblyPreHertz(boundContract *bind.BoundContract) error {
 	var result *big.Int
 	err = boundContract.Call(nil, &[]interface{}{&result}, "basefee_inline_assembly")
 	expectedErrorMsg := "invalid opcode: BASEFEE"
+	if err == nil {
+		return fmt.Errorf("Expected %s, got <nil>", expectedErrorMsg)
+	}
 	if err.Error() != expectedErrorMsg {
 		return fmt.Errorf("Expected %s, got %s", expectedErrorMsg, err.Error())
 	}
