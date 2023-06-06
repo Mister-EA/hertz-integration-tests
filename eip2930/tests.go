@@ -196,6 +196,9 @@ func preHertzTests() {
 
 func runPreHertz2930Tests() error {
 	_, err := sendAccessListTx()
+	if err == nil {
+		return fmt.Errorf("expected ErrTxTypeNotSupported but got `no error` instead")
+	}
 	if err != nil && err.Error() != types.ErrTxTypeNotSupported.Error() {
 		return fmt.Errorf("expected ErrTxTypeNotSupported but got '%v' instead", err)
 	}
