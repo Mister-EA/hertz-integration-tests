@@ -156,7 +156,6 @@ func testSendAccessListTx() error {
 
 	if block.GasUsed() != expected {
 		return fmt.Errorf("incorrect amount of gas spent: expected %d, got %d", expected, block.GasUsed())
-
 	}
 	return nil
 }
@@ -181,6 +180,28 @@ func run2930Tests() {
 	runTestCasesSequentially(testCases)
 }
 
+func preHertzTests() {
+	log.Println("Pre-Hertz tests:")
+	blockNr, err := client.BlockNumber(context.Background())
+	if err != nil {
+		log.Fatal(err)
+	}
+	if blockNr >= config.PostHertzBlockNumber {
+		log.Fatalf("Too late to run pre-Hertz tests since current block number %v is after Hertz hard fork block %v.\n", blockNr, config.PostHertzBlockNumber)
+	}
+	log.Printf("Waiting for block number %v to start running the test cases...\n", config.PreHertzBlockNumber)
+	runPreHertz2930Tests()
+	log.Println("All Pre-Hertz tests passed!")
+}
+
+func runPreHertz2930Tests() error {
+	_, err := sendAccessListTx()
+	if err != nil && err.Error() != types.ErrTxTypeNotSupported.Error() {
+		return fmt.Errorf("expected ErrTxTypeNotSupported but got '%v' instead", err)
+	}
+	return nil
+}
+
 func postHertzTests() {
 	log.Println("Post-Hertz tests:")
 	log.Printf("Waiting for block number %v to start running the test cases...\n", config.PostHertzBlockNumber)
@@ -195,7 +216,11 @@ func postHertzTests() {
 
 func main() {
 	var wg sync.WaitGroup
-	wg.Add(1)
+	wg.Add(2)
+	go func() {
+		defer wg.Done()
+		preHertzTests()
+	}()
 	go func() {
 		defer wg.Done()
 		postHertzTests()
