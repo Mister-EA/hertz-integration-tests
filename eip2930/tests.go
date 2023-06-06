@@ -180,6 +180,16 @@ func run2930Tests() {
 	runTestCasesSequentially(testCases)
 }
 
+func run2930PreHertzTests() {
+	testCases := []TestCase{
+		{
+			name:               "testSendAccessListPreHertz",
+			validationFunction: testSendAccessListPreHertz,
+		},
+	}
+	runTestCasesSequentially(testCases)
+}
+
 func preHertzTests() {
 	log.Println("Pre-Hertz tests:")
 	blockNr, err := client.BlockNumber(context.Background())
@@ -190,14 +200,12 @@ func preHertzTests() {
 		log.Fatalf("Too late to run pre-Hertz tests since current block number %v is after Hertz hard fork block %v.\n", blockNr, config.PostHertzBlockNumber)
 	}
 	log.Printf("Waiting for block number %v to start running the test cases...\n", config.PreHertzBlockNumber)
-	err = runPreHertz2930Tests()
-	if err != nil {
-		log.Fatal(err)
-	}
+	run2930PreHertzTests()
+
 	log.Println("All Pre-Hertz tests passed!")
 }
 
-func runPreHertz2930Tests() error {
+func testSendAccessListPreHertz() error {
 	_, err := sendAccessListTx()
 	if err == nil {
 		return fmt.Errorf("expected ErrTxTypeNotSupported but got `no error` instead")
